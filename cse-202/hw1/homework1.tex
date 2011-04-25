@@ -1,0 +1,176 @@
+\documentclass{article}
+\usepackage[left=2.50cm,right=2.50cm,top=2.50cm,bottom=2.50cm]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath, amssymb, }
+\usepackage{float}
+\usepackage{program}
+
+
+\begin{document}
+
+\title{Solutions to Homework-1}
+\author{Sanath Kumar Ramesh, A50054305}
+\date{12-April-2011}
+\maketitle
+
+Utpal Kumar, Sanjukta Mitra and I discussed about the homework. The solution write-up is my own.
+
+\section{Problem-1}
+\subsection{}
+	Let $C$ be a cut that divides the vertex set into $S$ and $V-S$ such that the heaviest edge $e$ is a part of the cut. There are two possibilities
+	\begin{enumerate}
+		\item $C$ has some more edges in it other than $e$ 
+		\item $C$ has only the edge $e$ ie. $e$ is the only edge in the cut. 
+	\end{enumerate}
+	Consider the second case. Since $e$ is the only edge in the cut, then any minimum spanning tree of the graph must include this edge $e$.\\
+	\textbf{Proof:} Since $e$ is the only edge in the cut, removal of that edge will result in the graph getting split into two disconnected components. Let us assume that an MST did not include this edge $e$. Since this is the only edge in the cut, such an MST can span within either one one of the partitions created by the cut but can never span through the whole graph ie. the MST will not include all vertices of the graph. Therefore the obtained tree can never be the spanning tree of the graph. Initially we assumed that our tree is an MST which is a contradiction. Therefore, by contraction, the MST must include this edge $e$ which is the unique heaviest edge in the graph. 
+
+	The statement in the problem is FALSE.
+
+\subsection{}
+The statement given in the problem is FALSE. The Find operation with path compression has the property that when a node's root has already been found, there is a direct path from the node to its root. Because of this feature, Find operation will take constant time. But when a new node/subgraph is inserted into the data structure, for nodes whose path has not been yet compressed, it'll take $log^{*}n$ steps to find the root. Once the root is found, later queries of the node's parent will happen in constant time. Therefore, the upper bound of the Find operation is $log^{*}n$ but not the asymptotic tight bound. $\Theta($log$n$) is not the tight bound of Find operation as it can take constant time for some cases.
+	
+\subsection{}
+The statement given in the problem is FALSE. It is a well known theorem that the lightest edge in a cut will be a part of an MST. But it is not always true that the same lightest edge will be a part of all MSTs of the graph. This happens when there are two or more edges in the cut each with the same weight as the lightest edge in the cut. In other words, when the lightest edge in the cut is not unique, any of the edges could be chosen arbitrarily for the formation of an MST. Therefore, it is not necessary for one lightest edge in a cut to be a part of all MSTs.
+
+
+\subsection{}
+The statement given in the problem is FALSE. If there is an unique heavy edge in a cycle, then an MST can be formed without this edge. But when there are more than one heaviest edges in a cycle, only one of them can be dropped to form an MST. After removing one of the heaviest edge from a cycle, any attempt to remove the other heaviest edges will disconnect the graph. \\
+\textbf{Proof:} If there are $n$ nodes, then a cycle would require a minimum of $n$ edges. After removing one heaviest edge, there will be $n$ nodes and $n-1$ edges and the graph will still be connected. Such a graph is a tree. Since a tree is the minimally connected graph, removal of any more edges will disconnect the graph. Therefore, removal of any more heaviest edges, will disconnect the graph, making it impossible to form an MST.
+
+\subsection{}
+The statement given in the problem is TRUE. Prim's algorithm works by (1) Partitioning the graph using a cut; (2) Selecting the lightest edge across the cut. Forming a cut in the graph is solely dependent on the edge connections between two nodes and not on the weight on the edges. Therefore, a cut can be formed irrespective of the weights on the edges. The lightest edge across a cut is the edge with minimum weight. Since negative numbers have lesser value than positive numbers, a edge with negative weight can be chosen as the lightest edge across the cut. Since both steps of Prim's algorithm are not affected by the negative weights, Prim's algorithm works fine with edges having negative weights.
+
+\section{Problem-2}
+Let us denote the set of equality constraints using $M_{eq}$ and the set of inequality constraints using $M_{ineq}$. $M_{eq}$ has $m_{1}$ constraints and $M_{ineq}$ has $m_{2}$ constraints. The idea of this algorithm is that we represent each $x_{i}$ as a node in a graph and each constraint in $M_{eq}$ as an edge in it. Let $G=(V,E)$ be our undirected graph. $V = {x_{1},x_{2},\ldots,x_{n}}$. For every equality constraint of the form $x_{i}=x_{j}$, make an edge in G from $x_{i}$ to $x_{j}$. In order to find if both constraints can be satisfied simultaneously, for each constraint of the form $x_{i} \neq x_{j}$ in the set $M_{ineq}$, find if there is a path from $x_{i}$ to $x_{j}$ in the graph G. If there is one such path, then the constraint cannot be satisfied. If there exist no path, then repeat the steps with another constraint from $M_{ineq}$.  Since G was constructed using the equality constraints, a path between two nodes mean that those two nodes are equal in value. 
+
+\NumberProgramstrue
+\begin{program}
+\mbox{\textbf{Algorithm check-constraints}}
+|Input: Sets | M_{eq} | and | M_{ineq}
+|Output: | true |, if constraints can be satisfied, | false |, otherwise|
+\BEGIN
+	V = \{x_{1},x_{2}, \ldots,x_{n}\}
+	E = \{ \}
+	\FOR |each | (x_{i}=x_{j}) \in  M_{eq} \DO
+		E = E \union (x_{i},x_{j})
+	\OD
+	\COMMENT{The graph has been constructed}
+
+	\FOR |each | x_{i} \neq x_{j} \in M_{ineq} \DO
+		\IF |path exists between | x_{i} | and | x_{j} | then|
+			|return | false \rcomment{// The inequality condition violates equality condition}
+		\FI
+	\OD
+	|return | true \rcomment{// No false condition was generated}
+\END
+\end{program}
+
+\noindent \textbf{Proof of Correctness:} \\
+Assuming that the sets  $M_{eq}$ and $M_{ineq}$ have constraints that cannot be satisfied. Let there exist a set of constraints $(x_{i}=x_{p1}),(x_{p1}=x_{p2}),(x_{p2}=x_{p3}),\ldots,(x_{pk}=x_{j}) \in M_{eq}$. By transitive nature of the constraints, $(x_{i}=x_{j})$. This means that in the graph $G$ constructed by the algorithm, there will be a path from $x_{i}$ to $x_{j}$. Let us assume that $(x_{i} \neq x_{j})$ is one of the constraints in $M_{ineq}$. On running the above algorithm, let us assume that the algorithm returned a $true$. Since the algorithm returned a true, it means that $ \forall x_{i} \neq x_{j} \in M_{ineq}$, there is NO path from $x_{i}$ to $x_{j}$ in $G$. But according to the assumption, there is a path from $x_{i}$ to $x_{j}$ in $G$. Therefore by contradiction, the algorithm cannot return $true$. It must return $false$ under this conditions.
+
+\noindent \textbf{Complexity:}\\
+Let this algorithm be implemented using the Union-Find data structure with path compression. The algorithm is rewritten with the data structure as follows:
+
+\NumberProgramstrue
+\begin{program}
+\mbox{\textbf{Algorithm check-constraints}}
+|Input: Sets | M_{eq} | and | M_{ineq}
+|Output: | true |, if constraints can be satisfied, | false |, otherwise|
+\BEGIN
+	V = \{x_{1},x_{2}, \ldots,x_{n}\}
+	E = \{ \}
+
+	\FOR |all | u \in V \DO
+		makeset(u)
+	\OD
+	
+	\FOR |each | (x_{i}=x_{j}) \in  M_{eq} \DO
+		E = E \union (x_{i},x_{j})
+		union(x_{i},x_{j})
+	\OD
+
+	\FOR |each | x_{i} \neq x_{j} \in M_{ineq} \DO
+		\IF find(x_{i}) = find(x_{j}) | then|
+			|return | false \rcomment{// The inequality condition violates equality condition}
+		\FI
+	\OD
+	|return | true \rcomment{// No false condition was generated}
+\END
+\end{program}
+
+The functions for implementing Union-Find data structure is as follows. It is exactly as the ones used for Kruskal's algorithm in the book. Therefore, I'm not explaining them here.
+
+\begin{program}
+\mbox{\textbf{function makeset(x)}}
+\BEGIN
+\pi(x)=x
+rank(x)=0
+\END
+\end{program}
+
+\begin{program}
+\mbox{\textbf{function union(x,y)}}
+\BEGIN
+r_{x} = find(x)
+r_{y} = find(y)
+\IF r_{x} = r_{y} | then |
+	return
+\FI
+\IF rank(r_{x}) > rank(r_{y}) | then |
+	\pi(r_{y}) = r_{x}
+\ELSE
+	\pi(r_{x}) = r_{y}
+	\IF rank(r_{x}) = rank(r_{y} ) | then |
+		rank(r_{y} ) = rank(r_{y} ) + 1
+	\FI
+\FI
+\END
+\end{program}
+
+\begin{program}
+\mbox{\textbf{function find(x)}}
+\BEGIN
+	\WHILE x \neq \pi(x) | do |
+		\pi(x) = find(\pi(x))
+	\END
+|return |\pi(x)
+\END
+\end{program}
+
+For the construction of the graph $G$, it takes $m_{1}$ union operations. Each union operation takes $log(n)$ steps. Therefore the graph construction ie. the first loop in the algorithm takes utmost $m_{1}*log(n)$ steps. With path compression, each find operation takes constant time. Therefore, in the second loop, $m_{2}$ constraints have to be evaluated with each evaluation taking constant time. Therefore the second loop takes $m_{2}*1$ steps.
+\ \\ \\
+ Complexity of the algorithm = $O(m_{1}*log(n) + m_{2})$
+
+\section{Problem-3} 
+Each person that Alice knows is represented as a node of a graph. If one person knows another, then an edge is created between the nodes representing those persons. Each node is annotated with the number of people the person representing that node knows. This number is exactly equal to the degree of that node. The algorithm iteratively removes nodes whose degree is less than 5 or nodes that have $(n - degree-of-node)<5$. The first condition enforces the property that a given person should know 5 or more people. The second condition enforces the property that for a given guest, there should be atleast 5 other guests who they don't know. When nodes are removed, all the incident edges are removed and the scores of neighboring nodes are decreased to reflect the removal of this node. The algorithm proceeds until all nodes in graph satisfy the constraint or there is no more node in the graph.
+
+\begin{program}
+\mbox{\textbf{Algorithm party-invite:}}
+|Input: A graph | G=(V,E) | representing the persons and their relationships|
+|Output: A set of nodes representing the persons who can be invited to party|
+\BEGIN
+	\FOR  v \in V | such that | (score(v)<5) \lor ((n-score(v))<5)\DO
+		V = V - \{v\}
+		E = E - \{|edges incident on |v\}
+
+		\FOR  u \in neighbors(v) \DO
+			score(u) = score(u) - 1;
+		\OD
+	\OD
+\END
+\end{program}
+
+The function $score(v)$ represents the number of neighbors of the node $v$. 
+
+\noindent \textbf{Proof of Correctness:}
+The algorithm terminates after all the nodes obey the condition or when the graph has no more nodes. In both the terminating cases, the output obeys the constraints given in the problem. For a graph with $n$ nodes, each node can have a maximum of $n-1$ neighbors. Therefore the inner loop will definitely finish in utmost $n-1$ iterations. The outer loop will definitely terminate in utmost $n$ iterations. Therefore the algorithm definitely terminates and when it terminates it produces the correct output.
+\ \\
+\noindent \textbf{Complexity}
+The worst case for this algorithm is when the input is a completely connected graph. For $n$ nodes, each node will have $n-1$ neighbors. Since in a completely connected graph none of the nodes satisfy the problem constraint, in each iteration of the outer loop, one node will be removed from the graph. The inner loop runs for $m-1$ iterations if there are $m$ nodes in a graph. Therefore,
+
+Total number of steps taken by whole program = $n*(n-1) + (n-1)*(n - 2) + \ldots + 2*1 + 1*0 = O(n^{2})$
+
+The algorithm can be implemented using Adjacency Lists for storing the graph. The score of each node is stored in the nodes of the graph. 
+
+\end{document}

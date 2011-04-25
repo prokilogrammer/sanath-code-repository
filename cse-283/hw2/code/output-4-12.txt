@@ -1,0 +1,17 @@
+Computing for test case #0
+Running Time : 14.73
+Computing for test case #1
+Running Time : 14.78
+Computing for test case #2
+Running Time : 14.72
+Computing for test case #3
+Running Time : 14.73
+Computing for test case #4
+Running Time : 14.78
+Computing for test case #5
+Running Time : 14.76
+Computing for test case #6
+Running Time : 14.79
+Computing for test case #7
+Running Time : 15.17
+
