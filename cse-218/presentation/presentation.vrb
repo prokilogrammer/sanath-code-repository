@@ -1,0 +1,8 @@
+\par \frametitle{References}
+\small{
+1. Christian Murphy, Kuang Shen, and Gail Kaiser. 2009. Automatic system testing of programs without test oracles. In Proceedings of the eighteenth international symposium on Software testing and analysis (ISSTA '09). ACM, New York, NY, USA, 189-200. DOI=10.1145/1572272.1572295  \\
+\ \\
+2. van der Burg, S.; Dolstra, E.; , "Automating System Tests Using Declarative Virtual Machines," Software Reliability Engineering (ISSRE), 2010 IEEE 21st International Symposium on , vol., no., pp.181-190, 1-4 Nov. 2010 doi: 10.1109/ISSRE.2010.34 \\
+\ \\
+3. Charles Pecheur, Franco Raimondi, and Guillaume Brat. 2009. A formal analysis of requirements-based testing. In Proceedings of the eighteenth international symposium on Software testing and analysis (ISSTA '09). ACM, New York, NY, USA, 47-56. DOI=10.1145/1572272.1572279 \\
+}

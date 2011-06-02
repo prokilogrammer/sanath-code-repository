@@ -1,0 +1,20 @@
+http://hydra.nixos.org/build/1083196/download/1/250gxbjbn620i9r1kkyr7xzgdmqdclk2-vm-test-run/log.html
+
+http://hydra.nixos.org/build/1083196/download/2/coverage/
+
+http://hydra.nixos.org/build/1084371/download/1/nixos/manual.html
+
+
+http://hydra.nixos.org/jobset/nixos/trunk/jobstatus
+Commands:
+
+To run different tests interactively:
+	$ nix-build nixos/tests/ -A nfs.driver
+	$ ./result/bin/nixos-run-vms
+
+
+For Quake:
+	Server: 	initctl status quake3-server
+	Client1: quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &
+	Client3: quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &
+	
